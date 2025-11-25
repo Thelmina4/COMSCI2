@@ -1,5 +1,0 @@
-Write a program lab10-longest-line.c 
-to read the data from the text file paragraph.txt. 
-You can assume that the maximum length of each sentence is 200. Remember to print \n at the end of the program
-The program then finds the longest sentence in the paragraph.
-The program displays the length of the sentence in the first line

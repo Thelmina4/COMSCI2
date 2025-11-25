@@ -1,8 +1,0 @@
-4 john
-3 dcu
-18
-34.5
-6 thelma
-7 trinity
-120
-85.6

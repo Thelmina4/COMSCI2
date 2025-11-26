@@ -40,7 +40,7 @@ Plan:
 Draw it out
 if there is one step x = 1, i = 0, x = x + i
 if there is 2 steps x = 1, i = 1, x = x + 1 = 2
-
+IT'S FIBONACCI
 */
 
 // libraries
@@ -53,29 +53,16 @@ int stairs(int x);
 // main function
 int main(int argc, char *argv[]) {
     int x = atoi(argv[1]);
-    stairs(x);
-    
+    int result = stairs(x);
+    printf("%d\n", result);
     return 0;
 }
 // function implementation
 int stairs(int x) 
 {
-    int result = 2;
-    if (x == 0){
-        printf("0\n");
-        return 0;
+    if (x == 0 || x == 1) {
+        return 1;
     }
-        if (x == 1){
-        printf("1\n");
-        return 0;
-
-    }
-    int i = 0;
-    for (int j = 1; j<x;j++) {
-
-        result += i;
-        i++;
-    }
-    printf("%d\n", result);
+    return stairs(x-1) + stairs(x-2);
 }
 

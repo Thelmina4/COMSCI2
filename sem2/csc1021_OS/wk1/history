@@ -1,0 +1,20 @@
+# need to be in wsl
+
+strace simple.py
+# Not on computer
+sudo apt install strace
+
+man syscall
+
+https://kernel.org/
+get the latest stable tarball of linux kernel
+
+find . -name "*.c" | xargs cat | wc -l
+
+cd arch/ .... syscalls/
+
+what is:
+objdump
+
+in the kernel:
+make menuconfig

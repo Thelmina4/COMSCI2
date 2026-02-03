@@ -50,6 +50,8 @@ int main (int argc, char ** argv)
         /* get command line from input */
         fputs (prompt, stdout); // write prompt
 
+        
+
         if (fgets (buf, MAX_BUFFER, stdin )) { // read a line
             /* tokenize the input into args array */
             arg = args;
@@ -70,9 +72,15 @@ int main (int argc, char ** argv)
                     continue;
                 }
 
+                if (!strcmp(args[0], "top")) {
+                    system("top");
+                    continue;
+                }
+
                 if (!strcmp(args[0],"quit"))   // "quit" command
                     break;                     // break out of 'while' loop
             
+                
                 /* else pass command onto OS (or in this instance, print them out) */
                 arg = args;
                 while (*arg) {
@@ -84,3 +92,5 @@ int main (int argc, char ** argv)
     }
     return 0; 
 }
+
+//  int setenv(const char *name, const char *value, int overwrite);

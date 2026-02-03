@@ -15,12 +15,18 @@ int main(int argc, char * argv[]) {
     int t = atoi(argv[1]);
 
     unsigned int slept;
-
-    while(1) {
+    printf("How many times do you wan tthe program to sleep?\n");
+    
+    int upper;
+    scanf("%d", &upper);
+    int i = 0;
+    while(i < 3) {
         // man7.org/linux/man-pages/man3/sleep.3.html
         slept = sleep(t);
         printf("process=%d ---- slept=%d\n", getpid(), slept);
+        i++;
     }
+    return 0;
 }
 // gcc -o sleepy sleepy.c
 // ./sleepy.c 5

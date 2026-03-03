@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # mtsleepD.py - Create Thread Instance, Passing in Callable Class Instance
-
+# not recommended to use as it is more difficult to work with
 import threading
 from time import sleep, ctime
 

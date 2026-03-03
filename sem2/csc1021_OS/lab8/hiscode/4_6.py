@@ -2,8 +2,6 @@ import threading
 from time import sleep, ctime
 
 loops = [4, 2]
-
-
 class ThreadFunc:
     def __init__(self, func, args, name=""):
         self.name = name
@@ -13,12 +11,10 @@ class ThreadFunc:
     def __call__(self):
         self.func(*self.args)
 
-
 def loop(nloop, nsec):
     print("start loop", nloop, "at:", ctime())
     sleep(nsec)
     print("loop", nloop, "done at:", ctime())
-
 
 def main():
     print("starting at:", ctime())
@@ -41,7 +37,6 @@ def main():
         threads[i].join()
 
     print("all DONE at:", ctime())
-
 
 if __name__ == "__main__":
     main()

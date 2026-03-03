@@ -97,3 +97,11 @@ As one program leads into the other, I need to note the order of creation
 3. mtsleepB.py
 4. mtsleepC.py
 5. mtsleepD.py
+6. mtsleepE.py
+7. myThread.py
+8. mtfacfib.py
+9. bookrank.py
+Still to do
+10. 
+11. 
+12. 

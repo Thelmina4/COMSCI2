@@ -1,0 +1,30 @@
+Kill is not jsut for killing a process. It is for sending signal. 
+Some of the signal tyoes we would send are for killing a process. 
+But if there is a user defined user handler then it can exit gracefully. 
+
+We can also send a kill command from inside of C. Look at the signalhandler.c code
+
+1) SIGHUP	 
+2) SIGINT -> interupt signal. ctrl C
+3) SIGQUIT -> This signal when sent to a process, causes the process to crash and it writes out a cpore dump. ctrl \
+4) SIGILL	 
+5) SIGTRAP
+6) SIGABRT	 7) SIGBUS	 8) SIGFPE	 
+9) SIGKILL -> An example of a signal that we can capture. No User definded signal handler for.
+	This is jsut going to instuct inside the terminal that it jsut wants to kill the process. 
+10) SIGUSR1
+11) SIGSEGV	12) SIGUSR2	13) SIGPIPE	14) SIGALRM	
+15) SIGTERM -> Lets say we have a GUI program running inside of LINUX. 
+	And we press the X in the corner to close, 
+	that process will be sent as SIGTERM. Whaaat it is saying that it wishes for that program to exit.
+	We could capture the signal and maybe so some cleanup and tell it to exit. 
+16) SIGSTKFLT	17) SIGCHLD	18) SIGCONT	19) SIGSTOP	20) SIGTSTP
+21) SIGTTIN	22) SIGTTOU	23) SIGURG	24) SIGXCPU	25) SIGXFSZ
+26) SIGVTALRM	27) SIGPROF	28) SIGWINCH	29) SIGIO	30) SIGPWR
+31) SIGSYS	34) SIGRTMIN	35) SIGRTMIN+1	36) SIGRTMIN+2	37) SIGRTMIN+3
+38) SIGRTMIN+4	39) SIGRTMIN+5	40) SIGRTMIN+6	41) SIGRTMIN+7	42) SIGRTMIN+8
+43) SIGRTMIN+9	44) SIGRTMIN+10	45) SIGRTMIN+11	46) SIGRTMIN+12	47) SIGRTMIN+13
+48) SIGRTMIN+14	49) SIGRTMIN+15	50) SIGRTMAX-14	51) SIGRTMAX-13	52) SIGRTMAX-12
+53) SIGRTMAX-11	54) SIGRTMAX-10	55) SIGRTMAX-9	56) SIGRTMAX-8	57) SIGRTMAX-7
+58) SIGRTMAX-6	59) SIGRTMAX-5	60) SIGRTMAX-4	61) SIGRTMAX-3	62) SIGRTMAX-2
+63) SIGRTMAX-1	64) SIGRTMAX	

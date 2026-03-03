@@ -25,6 +25,8 @@ explicit or implicit, is provided.
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>        // for getcwd() && chdir
+#include <errno.h>          // syserr
+
 #define MAX_BUFFER 1024    // max line buffer
 #define MAX_ARGS 64        // max # args
 #define SEPARATORS " \t\n" // token separators
@@ -37,8 +39,13 @@ int main(int argc, char **argv)
     char *args[MAX_ARGS];  // pointers to arg strings
     char **arg;            // working pointer thru args
     char *prompt = "==> "; // shell prompt
-    /* keep reading input until "quit" command or eof of redirected input */
 
+    // Extend parsing: detect redirection tokens
+    char *infile = NULL;    // redirect >
+    char *outfile = NULL;   // redirect <
+    int append = 0;         // redirect >> append to the file
+
+    /* keep reading input until "quit" command or eof of redirected input */
     while (!feof(stdin))
     {
         /* get command line from input */
@@ -53,6 +60,41 @@ int main(int argc, char **argv)
             while ((*arg++ = strtok(NULL, SEPARATORS)))
                 ;
 
+            // redirection of files & text
+            // here we records filenames
+            //  &&
+            // truncates args so exec doesn’t see < or >
+            for (int i = 0; i< args[i]; i++) {
+                if (!strcmp(args[i], "<")) {
+                    // the location of the file to take from is i+1
+                    infile = args[i+1];
+                    args[i] = NULL;
+                } else if (!strcmp(args[i], ">")) {
+                    // the location of the file to input to is i+1
+                    outfile = args[i+1];
+                    append = 0;
+                    args[i] = NULL;
+                } else if (!strcmp(args[i], ">>")) {
+                    outfile = args[i+1];
+                    // set append to 1
+                    append = 1;
+                    args[i] = NULL;
+                }
+            }
+            pid_t pid = fork();
+
+            if (pid == 0) {
+                // 1. CHILD: Handle redirection (using infile/outfile)
+                // 2. CHILD: Execute the command
+                execvp(args[0], args);
+                perror("execvp failed"); // Only runs if execvp fails
+                exit(EXIT_FAILURE);
+            } else if (pid > 0) {
+                // PARENT: Wait for child to finish before showing the next prompt
+                waitpid(pid, NULL, 0); 
+            } else {
+                perror("fork failed");
+            }
             // last entry will be NULL
             if (args[0])
             { // if there's anything there
@@ -73,18 +115,6 @@ int main(int argc, char **argv)
                     continue; // break out of 'while' loop
                 }
 
-                // If command  is  NULL, then  a nonzero value if a shell is  available,
-                // or  0  if  no shell is available.
-
-                // If  a  child  process could not be created, or  its  status could not be retrieved,
-                // the return  value  is  -1 and  errno  is set to indicate the error.
-
-                // If a shell could  not be  executed  in  the child  process,  then the  return  value is
-                // as though  the  child shell  terminated  by calling _exit(2) with the status 127.
-
-                // If all  system  calls succeed, then the return   value  is  the termination status of
-                // the child shell  used to  execute  command. (The termination status of a shell is the
-                // termination status of the last  command  it executes.)
                 if (!strcmp(args[0], "pwd"))
                 {
                     char *p = "PWD";
@@ -144,20 +174,42 @@ int main(int argc, char **argv)
                 }
 
                 if (!strcmp(args[0], "restart")) {
-                    // char *home = getenv("HOME");
-                    // if (home == NULL)
-                    // {
-                    //     fprintf(stderr, "cd: HOME not set\n");
-                    // }
-                    // else if (chdir(home) != 0)
-                    // {
-                    //     perror("cd");
-                    // }
+
                     printf("Restarting shell  ...\n");
                     execv(argv[0], argv);
                     perror("execv failed\n");
                     exit(1);
                 }
+
+                // the above are the internal commands,
+                // now we move to the external commands using fork()
+
+                pid_t pid = fork();
+                switch(pid) {
+                    case -1:
+                        syserr("fork");  // rare case that the fork fails
+
+                    case 0:
+                        // 3 cases, there is an infile 
+                        if (infile) {
+                            // if infile is not NULL <
+                            // note stdin here and stdout below for outfile
+                            fropen(infile, "r", stdin);
+                        }
+                        if (outfile) {
+                            if (append) {
+                                freopen(outfile, "a", stdout);
+                            } else {
+                                freopen(outfile, "w", stdout);
+                            }
+                        }
+                        // Still in the child:
+                        execvp(args[0], args);
+                        perror("exec failed\n");
+                        exit(1);
+                    }
+                // in the parent
+                wait(NULL);
                 /* else pass command onto OS (or in this instance, print them out) */
                 arg = args;
                 while (*arg)

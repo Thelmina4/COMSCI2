@@ -49,9 +49,6 @@ int main (int argc, char ** argv)
 
         /* get command line from input */
         fputs (prompt, stdout); // write prompt
-
-        
-
         if (fgets (buf, MAX_BUFFER, stdin )) { // read a line
             /* tokenize the input into args array */
             arg = args;

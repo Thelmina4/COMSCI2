@@ -1,0 +1,139 @@
+# Question 1
+
+#!/usr/bin/env python3
+
+# author: Thelma Clarke
+# SID: 17746069
+# question1
+
+# write a recursive function to sum from n to 0
+
+# input: int n
+# output n + (n-1) + ... + 2 + 1 = ?
+
+def sum_q1(n):
+    if n == 1:
+        return n
+    return n + sum_q1(n - 1)
+
+n = 6
+print(sum_q1(n))
+
+# Question 2
+
+#!/usr/bin/env python3
+
+# reverse an integer
+# 123 -> 321
+
+def rev_int(n):
+    if n == 0:
+        return 0
+    return (n % 10) * (10 ** (len(str(n))-1)) + (n // 10)
+
+n = 123
+print(rev_int(n))
+k = 6
+print(rev_int(k))
+j = 0
+print(rev_int(j))
+
+# Question 3
+
+#!/usr/bin/env python3
+
+# reverse a string recursively
+# "hello" -> "olleh"
+
+def rev_str(line):
+    if line == "":
+        # return line also works
+        return ""
+    # the next 2 lines are the same
+    # return line[len(line) - 1] + rev_str(line[:-1])
+    return line[-1] + rev_str(line[:-1])
+
+line = "Hello"
+print(rev_str(line))
+
+# Question 4
+
+#!/usr/bin/env python3
+
+# inverse a list of ints
+# [1, 2, 3, 4] -> [4, 3, 2, 1]
+
+def inverse_list(lst):
+    if lst == []:
+        return []
+    return [lst[-1]] + inverse_list(lst[:-1])
+
+lst = [1, 2, 3, 4]
+print(inverse_list(lst))
+# print(lst.pop())
+# print(lst)
+
+# Question 5
+
+#!/usr/bin/env python3
+
+# Create a function that returns
+#  product of two integers. 
+# This process of multiplication can be achieved 
+# via repetitive addition, thus, 
+# the process can be done recursively. 
+
+# multiply(10, 2) ➞ 20
+# multiply(-51, -4) ➞ 204
+# multiply(3, 9) ➞ 27
+
+def mul(n, times):
+   if times == 1:
+      return n
+   return n + mul(n, times -1)
+
+n = 4
+times = 6
+print(mul(n, times))
+
+# Question 6
+#!/usr/bin/env python3
+
+# A pronic number 
+# (or otherwise called as heteromecic) 
+# is a number which is a product of 
+# two consecutive integers, that is, 
+# a number of the form n(n + 1).
+# Create a function that determines whether a
+# number is pronic or not.
+
+# is_heteromecic(110) ➞ True
+# 10 * (10 + 1) = 10 * 11 = 110
+
+def is_heteromecic(num, n=0):
+    # print("Befroe", n, n+1, num)
+    if n == ((num // 2) + 1):
+        return False
+    if (n * (n + 1) == num):
+        # print("After", n, n+1, num)
+        return True
+    return is_heteromecic(num, n+1)
+num = 110
+k = 4
+print(is_heteromecic(num))
+# is_heteromecic() ➞ True
+
+# Question 7
+#!/usr/bin/env python3
+
+# function that returns the length of a string.
+# Make your function recursive.
+
+def len_str(word, i=0):
+    if word == "":
+        return i
+    return len_str(word[1:], i+1)
+
+word = "Thelmaa"
+print(len_str(word))
+# print(word[1:])

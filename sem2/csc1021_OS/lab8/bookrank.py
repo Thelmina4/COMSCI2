@@ -18,24 +18,32 @@ from time import ctime
 # for accessing each link.
 import urllib.request
 
-
+# REGEX, the regular expression object
+# (compiled from the regex pattern that matches a book’s ranking)
 REGEX = compile('#([\\d,]+) in Books ')
 AMZN = 'http://www.amazon.in/dp/'
 
 ISBNs = {
 '9390166268': 'The Psychology of Money',
 '9389053730': '1984',
-'0857863517':'The True Adventures of the Rolling Stones'
+'0857863517': 'The True Adventures of the Rolling Stones'
 }
 
+#  purpose of getRanking() is to take an ISBN, create the final URL with
+# which to communicate to Amazon’s servers, and then call urllib2.urlopen()
+# on it
 def getRanking(isbn):
     req = urllib.request.Request( '%s%s' % (AMZN, isbn), 
         data=None,
         headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15'})
 
+    # urllib2.urlopen() for accessing each link.
     page = urllib.request.urlopen(req)
+
+    #  the read() call is issued to download the entire Web page,
     data = page.read().decode('utf-8')
-    #print("data is\n", data)
+    # print("data is\n", data)
+    # and “file” is closed.   
 
     page.close()
     return REGEX.findall(data)[0]

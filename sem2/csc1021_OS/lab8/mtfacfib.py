@@ -38,12 +38,16 @@ def main():
         print(funcs[i].__name__, "finishsed at :", ctime())
 
     print("\n*** MULTIPLE THREADS")
+    # an empty list for threads
     threads = []
 
     # create all threads
     for i in nfuncs:
         # Thread Object that represents a single thread of execution
+        # def __init__(self, func, args, name=""):
+        # eg func = "the function fib", n = 12, funcs.__name__ = fib
         t = MyThread(funcs[i], (n, ), funcs[i].__name__)
+        # append the thread
         threads.append(t)
 
     # start all the threads

@@ -8,7 +8,7 @@ void sighandler(int sig) {
 }
 
 void sig_term(int sig) {
-    printf("Process %d reviecved SIGTERM (%d)\n", getpid(), sig);
+    printf("Process %d recieved SIGTERM (%d)\n", getpid(), sig);
     // !!!!! IMPORTANT TO EXIT !!!!
     exit(0);
 }

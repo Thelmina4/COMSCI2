@@ -11,7 +11,6 @@ abstract class Vehicle {
     }
 
     public abstract void startEngine();
-
 }
 
 class Car extends Vehicle {

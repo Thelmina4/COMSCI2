@@ -2,11 +2,9 @@
 
 import java.util.Queue;
 import java.util.LinkedList;
+// interface Mediator {
 
-interface Mediator {
-
-}
-
+// }
 class Patient {
     // A patient arrives with a condition:
     // Print: Patient <name> arrived with <condition>.
@@ -14,6 +12,7 @@ class Patient {
     // variables
     private String name;
     private String injury;
+    private String typeDoc;
     // constructor
     public Patient(String name) {
         this.name = name;
@@ -23,16 +22,19 @@ class Patient {
     public String getName() {return name;}
 
     public String getInjury() {return injury;}
+
+    public String getDoc() {return typeDoc;}
+
     // setters
 
     // methods
     // arrive
-    public void arrive(String injury, ERCoordinator er) {
+    public void arrive(String injury, ERCoordinator er, String typeDoc) {
+        this.typeDoc = typeDoc;
         this.injury = injury;
         System.out.println("Patient " + name + " arrived with " + injury + ".");
         er.addPatient(this);
     }
-
 }
 
 class Doctor {
@@ -51,10 +53,16 @@ class Doctor {
     private boolean available;
     private ERCoordinator er;
     private Patient patient;
+    private String specialty;
 
     // constructor
+    public Doctor(String id, String specialty) {
+        this.id = id;
+        this.specialty = specialty;
+    }
     public Doctor(String id) {
         this.id = id;
+        this.specialty = "General Doc";
     }
 
     // getters
@@ -62,7 +70,12 @@ class Doctor {
 
     public Patient getPatient() {return patient;}
 
+    public String getSpecialty() {return specialty;}
+
     // setters
+    public void setSpecialty(String s) {
+        if (s != null && !s.trim().isEmpty()) {specialty = s;}      
+    }
 
     // methods
     // 
@@ -85,11 +98,16 @@ class Doctor {
     // respondToPatient
     public void respondToPatient(boolean bool) {
         if (patient == null) {return;}
-        if (available && bool) {
+
+        if (bool) {
+            System.out.println("specialty: " + specialty + "\ntypeDoc : " + patient.getDoc());
             System.out.println("Doctor " + patient.getName() + " is treating Mary.");
             patient = null;
         } else {
+            // System.out.println("specialty: " + specialty + "\ntypeDoc : " + patient.getDoc());
+            // System.out.println(specialty.equals(patient.getDoc()));
             System.out.println("Doctor " + id + " cannot treat " + patient.getName() + ". Looking for another doctor...");
+            er.handleRejection(this, patient);
             patient = null;
         }
     }
@@ -135,9 +153,12 @@ class ERCoordinator {
         if (!patientQueue.isEmpty() && !doctorQueue.isEmpty()) {
             Doctor doc = doctorQueue.poll();
             Patient p = patientQueue.poll();
+            while (!doc.getSpecialty().equals(p.getDoc())) {
+                doctorQueue.add(doc);
+                doc = doctorQueue.poll();
+            }
             System.out.println("Coordinator assigned Doctor " + doc.getID() + " to Patient " + p.getName() + ".");
             doc.setPatient(p);
-
         }
     }
     public void handleRejection(Doctor d, Patient p) {
@@ -153,7 +174,6 @@ class ERCoordinator {
     }
 }
 
-
 public class Main {
     public static void main(String[] args) {
         ERCoordinator er = new ERCoordinator();
@@ -161,16 +181,16 @@ public class Main {
         Patient p1 = new Patient("John");
         Patient p2 = new Patient("Mary");
 
-        Doctor d1 = new Doctor("Dr-01");
-        Doctor d2 = new Doctor("Dr-02");
-        Doctor d3 = new Doctor("Dr-03");
+        Doctor d1 = new Doctor("Dr-01", "a");
+        Doctor d2 = new Doctor("Dr-02", "b");
+        Doctor d3 = new Doctor("Dr-03", "c");
 
         er.registerDoctor(d1);
         er.registerDoctor(d2);
         er.registerDoctor(d3);
 
-        p1.arrive("Broken Arm", er);
-        p2.arrive("Head Injury", er);
+        p1.arrive("Broken Arm", er, "a");
+        p2.arrive("Head Injury", er, "b");
 
         d1.setAvailable(true);
         d2.setAvailable(true);
